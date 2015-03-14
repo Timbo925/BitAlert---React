@@ -6,6 +6,7 @@ module.exports = {
     ADD_TASK: null,
     ADD_SOURCE: null,
     UPDATE_SOURCE: null,
+    REMOVE_SOURCE: null,
     SAVE_WALLET: null
   }),
 

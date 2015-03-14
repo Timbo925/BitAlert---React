@@ -18,11 +18,11 @@ let App = React.createClass({
 
   _onChange() {
     this.setState(TodoStore.getAll()); //When something changed get new event
+    this.setState(WalletStore.getAll)
   },
 
   componentDidMount() {
-    TodoStore.addChangeListener(this._onChange); //App listens to store for changeEvent aka mixins: [Store.mixin]
-    //WalletStore.addChangeListener(this._onChange);
+    WalletStore.addChangeListener(this._onChange); //Give Function to store to execute when emitChange();
   },
 
   componentWillUnmount() {

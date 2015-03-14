@@ -57,6 +57,8 @@ let WalletStore = assign({}, BaseStore, {
             break;
       case Constants.ActionTypes.ADD_SOURCE:
             addNewSource(action.data);
+            wallet.userName = "Timbo";
+            WalletStore.emitChange();
             break;
 
     }

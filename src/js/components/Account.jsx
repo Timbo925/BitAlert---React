@@ -18,8 +18,6 @@ let Account = React.createClass({
 
   render() {
     var account = this.props.data;
-    console.log("Render Account");
-
     return (
         <boot.Panel header={account.label} eventKey={this.props.index} bsStyle="primary">
           <boot.Table hover>
@@ -29,6 +27,7 @@ let Account = React.createClass({
                 <th> Type </th>
                 <th> Label </th>
                 <th> Balance </th>
+                <th> Actions </th>
               </tr>
             </thead>
             <tbody>

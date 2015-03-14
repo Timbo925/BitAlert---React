@@ -1,6 +1,7 @@
 var helper = require('./helper');
 var Address = require('./address');
 const Const = require('../constants/AppConstants');
+const Tx = require('./tx');
 
 //Interface
 function Source(data) {
@@ -11,6 +12,10 @@ function Source(data) {
   this.addressList = []; //For single only contains 1 address
   if (data.addressList) {
     for(var i = 0; i < data.addressList.length; i++) this.addressList.push(new Address(data.addressList[i]))
+  }
+  this.txList = []; //List of all TX regarding the source
+  if (data.txList) {
+    for(var i = 0; i < data.txList.length; i++) this.txList.push(new Tx(data.txList[i]));
   }
 }
 
