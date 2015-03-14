@@ -32,13 +32,16 @@ let Wallet = React.createClass({
               BitAlert Wallet
           </boot.PageHeader>
 
-          <boot.Col sm={4}>
+          <boot.Col sm={8}>
               <p> Wallet ID: {wallet.id}</p>
               <p> User Name: {wallet.userName}</p>
-              <boot.Button onClick={this.saveWallet} bsStyle="success">Save Wallet</boot.Button>
+          </boot.Col>
+            <boot.Button onClick={this.saveWallet} bsStyle="success">Save Wallet</boot.Button>
+          <boot.Col sm={4}>
+
           </boot.Col>
 
-          <boot.Col sm={8}>
+          <boot.Col sm={12}>
             <AccountAccordion data={wallet.accountList}/>
             <boot.Panel>
               <SourceInput data={wallet.accountList}/>

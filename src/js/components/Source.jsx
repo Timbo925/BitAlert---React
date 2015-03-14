@@ -1,6 +1,8 @@
-const React = require('react');
-const boot = require('react-bootstrap/lib');
-const walletActions = require('../actions/WalletActions');
+var React = require('react');
+var boot = require('react-bootstrap/lib');
+var ModalTrigger = boot.ModalTrigger;
+var walletActions = require('../actions/WalletActions');
+var SourceDetailModal = require('./SourceDetailModal.jsx');
 
 let Source = React.createClass({
   getInitialState() {
@@ -23,7 +25,11 @@ let Source = React.createClass({
         <td> {source.sourceType} </td>
         <td> {source.label} </td>
         <td> {source.getBalanceSat()} </td>
-        <td> <a onClick={this.updateSource}> Update </a> </td>
+        <td> <a onClick={this.updateSource}> Update </a>
+             <ModalTrigger modal={<SourceDetailModal data={source}/>}>
+               <a> Detail </a>
+             </ModalTrigger>
+        </td>
       </tr>
     )
   }
