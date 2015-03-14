@@ -1,4 +1,4 @@
-var Wallet = require('./wallet');
+var Wallet = require('./../model/wallet');
 
 function generateUUID(){
   var d = new Date().getTime();

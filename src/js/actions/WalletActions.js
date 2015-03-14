@@ -17,9 +17,22 @@ module.exports = {
   },
 
   updateSource: function(source) {
-    //TODO here calls to API or async tasks
     console.log('TODO Source to update: ' + JSON.stringify(source) + ' typeof: ' + typeof source)
+    AppDispatcher.handleServerAction({
+      type: Constants.ActionTypes.UPDATE_SOURCE_PENDING,
+      source: source
+    });
+
+    //TODO async update in
+
+    setTimeout(function () {
+      AppDispatcher.handleViewAction({
+        type: Constants.ActionTypes.UPDATE_SOURCE,
+        source: source
+      })
+    }, 2000)
   }
 
 
 };
+

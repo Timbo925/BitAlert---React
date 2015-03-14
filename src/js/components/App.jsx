@@ -17,7 +17,7 @@ let App = React.createClass({
   },
 
   _onChange() {
-    this.setState(TodoStore.getAll()); //When something changed get new event
+    //When something changed get new event
     this.setState(WalletStore.getAll)
   },
 
@@ -31,7 +31,6 @@ let App = React.createClass({
 
 
   render() {
-    let {tasks} = this.state;
     return (
       <div className="container">
 

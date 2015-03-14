@@ -27,8 +27,16 @@ function saveWallet() {
 }
 
 function addNewSource(data) {
-  console.log('TODO add to wallet: ' + JSON.stringify(data))
+  var account =  wallet.getAccountById(data.account);
+  delete data.account;
+  account.addSourceData(data);
 }
+
+function updateSource(source) {
+  source.addressList[0].balanceSat = 600;
+}
+
+
 
 // Facebook style store creation.
 let WalletStore = assign({}, BaseStore, {
@@ -57,7 +65,10 @@ let WalletStore = assign({}, BaseStore, {
             break;
       case Constants.ActionTypes.ADD_SOURCE:
             addNewSource(action.data);
-            wallet.userName = "Timbo";
+            WalletStore.emitChange();
+            break;
+      case Constants.ActionTypes.UPDATE_SOURCE:
+            updateSource(action.source);
             WalletStore.emitChange();
             break;
 

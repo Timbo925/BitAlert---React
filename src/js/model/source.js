@@ -1,4 +1,4 @@
-var helper = require('./helper');
+var helper = require('./../util/helper');
 var Address = require('./address');
 const Const = require('../constants/AppConstants');
 const Tx = require('./tx');
@@ -6,6 +6,7 @@ const Tx = require('./tx');
 //Interface
 function Source(data) {
   var data = data || {};
+  this.initialized = data.initialized || false;
   this.id = data.id || helper.generateUUID();
   this.label = data.label || '';
   //this.balanceSat = data.balanceSat || 0;
@@ -13,13 +14,9 @@ function Source(data) {
   if (data.addressList) {
     for(var i = 0; i < data.addressList.length; i++) this.addressList.push(new Address(data.addressList[i]))
   }
-  this.txList = []; //List of all TX regarding the source
-  if (data.txList) {
-    for(var i = 0; i < data.txList.length; i++) this.txList.push(new Tx(data.txList[i]));
-  }
 }
 
-Source.prototype.updateBalance = function() {
+Source.prototype.update = function() {
   console.log("WARNING: Using base object Source which is an interface")
 };
 
@@ -38,8 +35,9 @@ function SingleSource(data) {
 SingleSource.prototype = Object.create(Source.prototype);
 SingleSource.prototype.constructor = SingleSource; //Set constructor to SingleSource
 
-SingleSource.prototype.updateBalance = function() {
-  console.log("TODO update single source")
+SingleSource.prototype.update = function(callback) {
+  console.log("TODO update single source");
+  callback(null)
 };
 
 function XpubSource(data) {

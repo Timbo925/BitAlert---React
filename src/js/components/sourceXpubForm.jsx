@@ -1,6 +1,7 @@
 const React = require('react');
 const boot = require('react-bootstrap/lib');
 var Const = require('../constants/AppConstants');
+const WalletAction = require('../actions/WalletActions');
 
 let sourceXpubForm = React.createClass({
   getInitialState() {
@@ -21,7 +22,7 @@ let sourceXpubForm = React.createClass({
 
   submitForm(e) {
     e.preventDefault();
-    console.log(this.getFormData())
+    WalletAction.addNewSource(this.getFormData());
   },
 
   render() {

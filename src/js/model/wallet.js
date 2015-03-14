@@ -1,5 +1,5 @@
 var Account = require('./account');
-var helper = require('./helper');
+var helper = require('./../util/helper');
 
 function Wallet(data){
   var data = data || {};
@@ -25,6 +25,7 @@ Wallet.prototype.changeAccount = function(id, key, value) {
     if (this.accountList[i].id == id) this.accountList[i].set(key, value);
   }
 };
+
 
 Wallet.prototype.getAccountById = function(id) {
   for (var i = 0; i<this.accountList.length; i++) {
