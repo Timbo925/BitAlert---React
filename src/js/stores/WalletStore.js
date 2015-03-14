@@ -32,9 +32,6 @@ function addNewSource(data) {
   account.addSourceData(data);
 }
 
-function updateSource(source) {
-  source.addressList[0].balanceSat = 600;
-}
 
 
 
@@ -68,7 +65,7 @@ let WalletStore = assign({}, BaseStore, {
             WalletStore.emitChange();
             break;
       case Constants.ActionTypes.UPDATE_SOURCE:
-            updateSource(action.source);
+            console.log(JSON.stringify(wallet));
             WalletStore.emitChange();
             break;
 

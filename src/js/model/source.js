@@ -2,6 +2,7 @@ var helper = require('./../util/helper');
 var Address = require('./address');
 const Const = require('../constants/AppConstants');
 const Tx = require('./tx');
+const Api = require('../util/api');
 
 //Interface
 function Source(data) {
@@ -22,7 +23,7 @@ Source.prototype.update = function() {
 
 Source.prototype.getBalanceSat = function() {
   var balanceSat = 0;
-  for(var i = 0; i< this.addressList.length; i++) balanceSat += this.addressList[i].balanceSat;
+  for(var i = 0; i< this.addressList.length; i++) balanceSat += this.addressList[i].getBalanceSat();
   return balanceSat;
 };
 
@@ -36,8 +37,24 @@ SingleSource.prototype = Object.create(Source.prototype);
 SingleSource.prototype.constructor = SingleSource; //Set constructor to SingleSource
 
 SingleSource.prototype.update = function(callback) {
-  console.log("TODO update single source");
-  callback(null)
+  var source = this;
+  Api.getAddresses([source.addressList[0].address],function(err, aList) {
+    var address = source.addressList[0];
+    var newAddress = aList[0];
+    if (source.initialized == false) {
+      source.initialized = true;  //Set Updated to true
+      source.addressList = aList; //Address can be changed to returned array from API
+    } else {
+      if (address.getBalanceSat() != newAddress.getBalanceSat()) {
+        //When different something must have changed in id tx
+        for (tx of newAddress.txList) {
+          var index = helper.indexOfObjectArray(address.txList, tx.tx, 'tx');
+          if (index < 0) address.txList.push(tx); // No else because
+        }
+      }
+    }
+    callback(null);
+  });
 };
 
 function XpubSource(data) {
@@ -52,6 +69,10 @@ function XpubSource(data) {
 XpubSource.prototype = Object.create(Source.prototype);
 XpubSource.prototype.constructor = XpubSource;
 
+//TODO XpubSource.update
+XpubSource.prototype.update = function(callback) {
+
+};
 exports.Source = Source;
 exports.SingleSource = SingleSource;
 exports.XpubSource = XpubSource;

@@ -23,16 +23,17 @@ module.exports = {
       source: source
     });
 
-    //TODO async update in
-
-    setTimeout(function () {
+    source.update(function(err) {
       AppDispatcher.handleViewAction({
-        type: Constants.ActionTypes.UPDATE_SOURCE,
-        source: source
+        type: Constants.ActionTypes.UPDATE_SOURCE
       })
-    }, 2000)
+    });
+    //setTimeout(function () {
+    //  AppDispatcher.handleViewAction({
+    //    type: Constants.ActionTypes.UPDATE_SOURCE,
+    //    source: source
+    //  })
+    //}, 2000)
   }
-
-
-};
+}
 

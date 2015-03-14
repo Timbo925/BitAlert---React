@@ -8,6 +8,14 @@ function generateUUID(){
     return (c=='x' ? r : (r&0x3|0x8)).toString(16);
   });
   return uuid;
-};
+}
 
+function indexOfObjectArray(array, search, prop) {
+  for (var i = 0; i < array.length; i++) {
+    if (array[i][prop] === search) return i;
+  }
+  return -1;
+}
+
+module.exports.indexOfObjectArray = indexOfObjectArray;
 module.exports.generateUUID = generateUUID;
