@@ -18,22 +18,21 @@ let sourceSingleEditForm = React.createClass({
         <Input type="text" label='id' value={source.id} readOnly />
         <Input type='text' label='Label' defaultValue={source.label}/>
         <Input type='text' label='Type' value={source.sourceType} readOnly/>
-        {source.addressList.map(function(address, index) {
-          return (
-            <Table>
-              <thead>
-                <tr>
-                  <th> Address </th> <th> Balance </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
+        <Table>
+          <thead>
+            <tr>
+              <th> Address </th> <th> Balance </th>
+            </tr>
+          </thead>
+          <tbody>
+            {source.addressList.map(function(address, index) {
+              return (
+                <tr key={index}>
                   <td> {address.address} </td> <td> {address.getBalanceSat()} </td>
-                </tr>
-              </tbody>
-            </Table>
-          )
-        })}
+                </tr>)
+            })}
+          </tbody>
+        </Table>
       </form>
     );
   }

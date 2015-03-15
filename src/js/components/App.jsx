@@ -1,45 +1,33 @@
-const React = require('react');
-const TodoStore = require('../stores/TodoStore');
-const ActionCreator = require('../actions/TodoActionCreators');
-const Button = require('react-bootstrap/lib/Button');
-const Jumbotron = require('react-bootstrap/lib/Jumbotron');
-const TaskList = require('./TaskList.jsx');
-const Source = require('./Source.jsx');
-const WalletStore = require('../stores/WalletStore');
-const Wallet = require('./Wallet.jsx');
+var React = require('react');
+//Pages
+var Wallet = require('./Wallet.jsx');
+var PageTransactions = require('./PageTransactions.jsx');
+var PageNotFound = require('./PageNotFound.jsx');
+//Router
+var Router = require('react-router-component');
+var Locations = Router.Locations;
+var Location = Router.Location;
+var NotFound = Router.NotFound;
 
 let App = React.createClass({
 
   getInitialState() {
     return {
-      wallet: WalletStore.loadWallet() //App launches by loading wallet from user
+
     }
   },
 
-  _onChange() {
-    //When something changed get new event
-    this.setState(WalletStore.getAll)
-  },
-
-  componentDidMount() {
-    WalletStore.addChangeListener(this._onChange); //Give Function to store to execute when emitChange();
-  },
-
-  componentWillUnmount() {
-    TodoStore.removeChangeListener(this._onChange);
-  },
-
-
   render() {
     return (
-      <div className="container">
-
-        <Wallet wallet={this.state.wallet} />
-
-      </div>
+      <Locations>
+        <Location path="/" handler={Wallet} />
+        <Location path="/tx" handler={PageTransactions} />
+        <NotFound handler={PageNotFound} />
+      </Locations>
     );
   }
 
 });
+
 
 module.exports = App;

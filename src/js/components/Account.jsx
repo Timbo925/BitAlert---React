@@ -23,7 +23,7 @@ let Account = React.createClass({
           <boot.Table hover>
             <thead>
               <tr>
-                <th> # </th>
+                <th>  </th>
                 <th> Type </th>
                 <th> Label </th>
                 <th> Balance </th>

@@ -54,7 +54,7 @@ Account.prototype.addSourceData = function (data) {
 var returnSourceList = function (data) {
   var list = [];
   for (var i = 0; i<data.length; i++) {
-    console.log(data[i]);
+    //console.log(data[i]);
     switch (data[i].sourceType) {
       case constants.SourceTypes.Single:
         list.push(new Source.SingleSource(data[i]));
