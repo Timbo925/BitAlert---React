@@ -2,6 +2,7 @@ const React = require('react');
 const boot = require('react-bootstrap/lib');
 const Table = boot.Table;
 const Input = boot.Input;
+const Accounting = require('accounting');
 
 let sourceSingleEditForm = React.createClass({
   getInitialState() {
@@ -28,7 +29,7 @@ let sourceSingleEditForm = React.createClass({
             {source.addressList.map(function(address, index) {
               return (
                 <tr key={index}>
-                  <td> {address.address} </td> <td> {address.getBalanceSat()} </td>
+                  <td> {address.address} </td> <td> {Accounting.formatMoney(address.getBalanceSat()/100  , { symbol: "bits",  format: "%v %s" })} </td>
                 </tr>)
             })}
           </tbody>

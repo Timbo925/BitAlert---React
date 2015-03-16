@@ -16,6 +16,12 @@ function Wallet(data){
   }
 }
 
+Wallet.prototype.getBalanceSat = function() {
+  var balanceSat = 0;
+  for (var account of this.accountList) balanceSat += account.getBalanceSat();
+  return balanceSat;
+};
+
 Wallet.prototype.getUserName = function ( ) {
   return this.userName;
 };

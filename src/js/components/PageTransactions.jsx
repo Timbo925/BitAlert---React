@@ -1,4 +1,5 @@
 const React = require('react');
+const NavigationPils = require('./NavigationPils.jsx');
 
 let PageTransactions = React.createClass({
   getInitialState() {
@@ -10,7 +11,9 @@ let PageTransactions = React.createClass({
 
   render() {
     return (
-      <p>Hello, world!</p>
+      <div className = "container">
+        <NavigationPils active={2}/>
+      </div>
     );
   }
 });

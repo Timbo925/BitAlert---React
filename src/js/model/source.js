@@ -39,6 +39,7 @@ SingleSource.prototype.constructor = SingleSource; //Set constructor to SingleSo
 SingleSource.prototype.update = function(callback) {
   var source = this;
   Api.getAddresses([source.addressList[0].address],function(err, aList) {
+    if (!err && !aList[0]) return callback(new Error('Something went wrong retrieving balances'))
     var address = source.addressList[0];
     var newAddress = aList[0];
     if (source.initialized == false) {

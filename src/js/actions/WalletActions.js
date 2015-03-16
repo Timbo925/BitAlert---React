@@ -30,10 +30,11 @@ module.exports = {
     });
 
     source.update(function(err) {
+      //TODO notification when problem
       AppDispatcher.handleViewAction({
         type: Constants.ActionTypes.UPDATE_SOURCE
       })
     });
   }
-}
+};
 
