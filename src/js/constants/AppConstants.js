@@ -3,8 +3,8 @@ const keyMirror = require('react/lib/keyMirror');
 module.exports = {
 
   ActionTypes: keyMirror({
-    ADD_TASK: null,
     ADD_SOURCE: null,
+    ADD_ACCOUNT: null,
     UPDATE_SOURCE: null,
     UPDATE_SOURCE_PENDING: null,
     REMOVE_SOURCE: null,

@@ -65,10 +65,12 @@ let WalletStore = assign({}, BaseStore, {
             WalletStore.emitChange();
             break;
       case Constants.ActionTypes.UPDATE_SOURCE:
-            console.log(JSON.stringify(wallet));
             WalletStore.emitChange();
             break;
-
+      case Constants.ActionTypes.ADD_ACCOUNT:
+            wallet.addAccountData(action.data);
+            WalletStore.emitChange();
+            break;
     }
   })
 

@@ -34,6 +34,10 @@ Wallet.prototype.getAccountById = function(id) {
   return null;
 };
 
+Wallet.prototype.addAccountData = function(data) {
+  this.accountList.push(new Account(data));
+};
+
 function saveWallet(wallet) {
   // TODO implement saving ot local storage, encrypted
   console.log('Saving to LocalStorage');
@@ -46,41 +50,11 @@ function loadWallet(passwordHash) { //Loads wallet from localstorage or creates 
   var newWallet;
   if (!retrievedObject) newWallet = new Wallet();
   else newWallet = new Wallet(JSON.parse(retrievedObject));
-  console.log('New Wallet Loaded');
-  console.log(newWallet);
+  console.log('Wallet Loaded: ', newWallet);
   return newWallet;
 }
 
 module.exports.Wallet = Wallet;
 module.exports.loadWallet = loadWallet;
 module.exports.saveWallet = saveWallet;
-
-
-//////////////////
-////TEST CODE ////
-//////////////////
-
-//var Source = require('./source');
-//var SingleSource = Source.SingleSource;
-//var XpubSource = Source.XpubSource;
-//
-//var wallet = new Wallet({userName: 'Timbo925'});
-//
-//var a1 = new Account({balanceSat : 10});
-//var a2 = new Account({balanceSat: 100});
-//
-//var ss1 = new SingleSource({label: 'SS01'});
-//var ss2 = new SingleSource({label: 'SS02'});
-//var xp1 = new XpubSource({label: 'Xpub01'});
-//
-//wallet.accountList.push(a1);
-//wallet.accountList.push(a2);
-//wallet.accountList[0].sourceList.push(ss1);
-//wallet.accountList[0].sourceList.push(xp1);
-//wallet.accountList[1].sourceList.push(ss2);
-//
-//wallet.accountList[0].set('test', 'Yo!!');
-//
-//console.log(JSON.stringify(wallet,null,3));
-
 

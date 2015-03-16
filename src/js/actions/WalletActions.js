@@ -16,8 +16,14 @@ module.exports = {
     })
   },
 
+  addNewAccount: function(data) {
+    AppDispatcher.handleViewAction({
+      type: Constants.ActionTypes.ADD_ACCOUNT,
+      data: data
+    })
+  },
+
   updateSource: function(source) {
-    console.log('TODO Source to update: ' + JSON.stringify(source) + ' typeof: ' + typeof source)
     AppDispatcher.handleServerAction({
       type: Constants.ActionTypes.UPDATE_SOURCE_PENDING,
       source: source
@@ -28,12 +34,6 @@ module.exports = {
         type: Constants.ActionTypes.UPDATE_SOURCE
       })
     });
-    //setTimeout(function () {
-    //  AppDispatcher.handleViewAction({
-    //    type: Constants.ActionTypes.UPDATE_SOURCE,
-    //    source: source
-    //  })
-    //}, 2000)
   }
 }
 

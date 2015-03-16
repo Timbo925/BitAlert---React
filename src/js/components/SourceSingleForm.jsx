@@ -5,7 +5,8 @@ const WalletAction = require('../actions/WalletActions');
 
 let sourceSingleForm = React.createClass({
   getInitialState() {
-    return {};
+    return {
+    };
   },
 
   componentDidMount() {
@@ -20,9 +21,16 @@ let sourceSingleForm = React.createClass({
     }
   },
 
+  resetForm() {
+    this.refs.label.getInputDOMNode().value = '';
+    this.refs.address.getInputDOMNode().value = '';
+  },
+
   submitForm(e) {
     e.preventDefault();
-    WalletAction.addNewSource(this.getFormData());
+    var data = this.getFormData();
+    this.resetForm();
+    WalletAction.addNewSource(data);
   },
 
   render() {

@@ -47,7 +47,7 @@ SingleSource.prototype.update = function(callback) {
     } else {
       if (address.getBalanceSat() != newAddress.getBalanceSat()) {
         //When different something must have changed in id tx
-        for (tx of newAddress.txList) {
+        for (var tx of newAddress.txList) {
           var index = helper.indexOfObjectArray(address.txList, tx.tx, 'tx');
           if (index < 0) address.txList.push(tx); // No else because
         }

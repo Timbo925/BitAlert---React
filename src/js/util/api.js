@@ -4,17 +4,16 @@ var Address = require('../model/address');
 var exp = {
 
   getAddresses : function(addressList, callback) {
-    console.log(addressList)
     var list = [];
     request
       .get('http://btc.blockr.io/api/v1/address/info/' + addressToString(addressList))
       .accept('json')
       .query({confirmations: 0})
       .end(function(err, res) {
+        console.log('API GET Addresses: ' , res);
         if (res.ok) {
           if (addressList.length == 1) var data = [res.body.data];
           else var data = res.body.data;
-          console.log(data);
           for (var i = 0; i < data.length; i++) {
             var tx = {};
             if (data[i].last_tx) {

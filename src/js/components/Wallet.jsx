@@ -1,6 +1,9 @@
 const React = require('react');
 const boot = require('react-bootstrap/lib');
+const Panel = boot.Panel;
+const Col = boot.Col;
 const Account = require('./Account.jsx');
+
 const AccountAccordion = require('./AccountAccordion.jsx');
 const walletActions = require('../actions/WalletActions');
 const SourceInput = require('./SourceInput.jsx');
@@ -42,27 +45,27 @@ let Wallet = React.createClass({
       <div className = "container">
         <boot.Row>
           <Link glabal href= "/tx"> Tx  Up here</Link>
-          <boot.Col sm={12}>
+          <Col sm={12}>
             <boot.PageHeader>
                 BitAlert Wallet
             </boot.PageHeader>
 
-            <boot.Col sm={8}>
+            <Col sm={8}>
                 <p> Wallet ID: {wallet.id}</p>
                 <p> User Name: {wallet.userName}</p>
-            </boot.Col>
+            </Col>
               <boot.Button onClick={this.saveWallet} bsStyle="success">Save Wallet</boot.Button>
-            <boot.Col sm={4}>
+            <Col sm={4}>
 
-            </boot.Col>
+            </Col>
 
-            <boot.Col sm={12}>
+            <Col sm={12}>
               <AccountAccordion data={wallet.accountList}/>
-              <boot.Panel>
+              <Panel header="Information Creation">
                 <SourceInput data={wallet.accountList}/>
-              </boot.Panel>
-            </boot.Col>
-          </boot.Col>
+              </Panel>
+            </Col>
+          </Col>
         </boot.Row>
       </div>
     );

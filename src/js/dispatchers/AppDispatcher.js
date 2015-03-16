@@ -9,6 +9,7 @@ let AppDispatcher = assign(new Dispatcher(), {
       source: Constants.ActionSources.SERVER_ACTION,
       action: action
     };
+    console.log('Dispatching Server: ', payload.action.type, payload);
     this.dispatch(payload);
   },
 
@@ -17,6 +18,7 @@ let AppDispatcher = assign(new Dispatcher(), {
       source: Constants.ActionSources.VIEW_ACTION,
       action: action
     };
+    console.log('Dispatching Action: ' , payload.action.type ,payload);
     this.dispatch(payload);
   }
 
