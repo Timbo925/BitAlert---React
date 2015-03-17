@@ -71,6 +71,10 @@ let WalletStore = assign({}, BaseStore, {
             wallet.addAccountData(action.data);
             WalletStore.emitChange();
             break;
+      case Constants.ActionTypes.EDIT_SOURCE:
+            wallet.editSourceFields(action.id, action.data);
+            WalletStore.emitChange();
+            break;
     }
   })
 

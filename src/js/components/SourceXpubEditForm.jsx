@@ -1,12 +1,11 @@
 const React = require('react');
 const boot = require('react-bootstrap/lib');
+const Input = boot.Input;
 const Button = boot.Button;
 const Table = boot.Table;
-const Input = boot.Input;
 const Accounting = require('accounting');
-const WalletActions = require('../actions/WalletActions');
 
-let sourceSingleEditForm = React.createClass({
+let SourceXpubEditForm = React.createClass({
   getInitialState() {
     return {};
   },
@@ -15,24 +14,40 @@ let sourceSingleEditForm = React.createClass({
   },
 
   editLabel() {
-    WalletActions.editSourceFields(this.props.data.id, {label: this.refs.label.getInputDOMNode().value})
+    //TODO
   },
 
   render() {
-    var source = this.props.data;
+    var source = this.props.data
     return (
       <form>
         <Input type="text" label='id' value={source.id} readOnly />
         <Input type='text' label='Label' ref='label' defaultValue={source.label} buttonAfter={<Button onClick={this.editLabel} bsStyle='warning'> Edit </Button>}/>
         <Input type='text' label='Type' value={source.sourceType} readOnly/>
+        <Input type='text' label='Xpub' value={source.xpub} readOnly />
         <Table>
           <thead>
             <tr>
-              <th> Address </th> <th> Balance </th>
+              <th> Regular Addresses </th> <th> Balance </th>
             </tr>
           </thead>
           <tbody>
             {source.addressList.map(function(address, index) {
+              return (
+                <tr key={index}>
+                  <td> {address.address} </td> <td> {Accounting.formatMoney(address.getBalanceSat()/100  , { symbol: "bits",  format: "%v %s" })} </td>
+                </tr>)
+            })}
+          </tbody>
+        </Table>
+        <Table>
+          <thead>
+            <tr>
+              <th> Change Addresses </th> <th> Balance </th>
+            </tr>
+          </thead>
+          <tbody>
+            {source.changeAddressList.map(function(address, index) {
               return (
                 <tr key={index}>
                   <td> {address.address} </td> <td> {Accounting.formatMoney(address.getBalanceSat()/100  , { symbol: "bits",  format: "%v %s" })} </td>
@@ -45,4 +60,4 @@ let sourceSingleEditForm = React.createClass({
   }
 });
 
-module.exports = sourceSingleEditForm;
+module.exports = SourceXpubEditForm;

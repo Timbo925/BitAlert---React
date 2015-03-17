@@ -4,6 +4,7 @@ const Modal = boot.Modal;
 const Button = boot.Button;
 const constants = require('../constants/AppConstants');
 const SourceSingleEditForm = require('./SourceSingleEditForm.jsx');
+const SourceXpubEditForm = require('./SourceXpubEditForm.jsx');
 
 let sourceDetailModel = React.createClass({
   getInitialState() {
@@ -20,6 +21,9 @@ let sourceDetailModel = React.createClass({
       case constants.SourceTypes.Single:
         SourceEdit = SourceSingleEditForm;
         break;
+      case constants.SourceTypes.Xpub:
+        SourceEdit = SourceXpubEditForm;
+        break;
     }
 
     return (
@@ -27,6 +31,7 @@ let sourceDetailModel = React.createClass({
         <div className="modal-body">
           <SourceEdit data={source}/>
         </div>
+
 
         <div className="modal-footer">
           <Button onClick={this.props.onRequestHide}>Close</Button>

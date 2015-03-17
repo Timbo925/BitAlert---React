@@ -8,7 +8,8 @@ module.exports = {
     UPDATE_SOURCE: null,
     UPDATE_SOURCE_PENDING: null,
     REMOVE_SOURCE: null,
-    SAVE_WALLET: null
+    SAVE_WALLET: null,
+    EDIT_SOURCE: null
   }),
 
   ActionSources: keyMirror({

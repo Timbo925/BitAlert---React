@@ -32,6 +32,10 @@ Account.prototype.addSource = function (source) {
   this.sourceList = this.sourceList.concat(source);
 };
 
+/**
+ *
+ * @param data: {sourType: required, xpub: required, label, optional}
+ */
 Account.prototype.addSourceData = function (data) {
   switch (data.sourceType) {
     case constants.SourceTypes.Single:

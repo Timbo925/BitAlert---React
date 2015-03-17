@@ -23,7 +23,7 @@ module.exports = {
     })
   },
 
-  updateSource: function(source) {
+  updateSource: function(source, callback) {
     AppDispatcher.handleServerAction({
       type: Constants.ActionTypes.UPDATE_SOURCE_PENDING,
       source: source
@@ -31,10 +31,22 @@ module.exports = {
 
     source.update(function(err) {
       //TODO notification when problem
-      AppDispatcher.handleViewAction({
-        type: Constants.ActionTypes.UPDATE_SOURCE
-      })
+      if (err) return callback(err);
+      else {
+        AppDispatcher.handleViewAction({
+          type: Constants.ActionTypes.UPDATE_SOURCE
+        })
+        callback(null)
+      }
     });
+  },
+
+  editSourceFields: function(id, data) {
+    AppDispatcher.handleServerAction({
+      type: Constants.ActionTypes.EDIT_SOURCE,
+      id: id,
+      data: data
+    })
   }
 };
 

@@ -1,4 +1,5 @@
 var Wallet = require('./../model/wallet');
+var Acounting = require('accounting');
 
 function generateUUID(){
   var d = new Date().getTime();
@@ -17,5 +18,10 @@ function indexOfObjectArray(array, search, prop) {
   return -1;
 }
 
+function getBalanceFormatted(number) {
+  return Accounting.formatMoney(address.getBalanceSat()  , { symbol: "bits",  format: "%v %s" })
+}
+
+module.exports.getBAlanceFormatted = getBalanceFormatted;
 module.exports.indexOfObjectArray = indexOfObjectArray;
 module.exports.generateUUID = generateUUID;

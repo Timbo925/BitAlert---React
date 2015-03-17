@@ -5,6 +5,7 @@ var exp = {
 
   getAddresses : function(addressList, callback) {
     var list = [];
+    if (addressList.length == 0 ) callback (null)
     request
       .get('http://btc.blockr.io/api/v1/address/info/' + addressToString(addressList))
       .accept('json')
@@ -23,7 +24,8 @@ var exp = {
             list.push(new Address({
               address: data[i].address,
               balanceSat: data[i].balance*1e8 + data[i].balance_multisig,
-              txList: [tx]
+              txList: [tx],
+              nb_txs: data[i].nb_txs
             }))
           }
           return callback(null, list)
@@ -35,12 +37,12 @@ var exp = {
 };
 
 function addressToString(list) {
-  var array = ''
+  var str = ''
   for (var i=0;i<list.length; i++) {
-    array += list[i]
-    if (i != list.length - 1)  array += ','
+    str += list[i];
+    if (i != list.length - 1)  str += ','
   }
-  return array;
+  return str;
 }
 
 module.exports = exp;

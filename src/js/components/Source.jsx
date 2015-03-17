@@ -7,10 +7,11 @@ var ButtonToolbar = boot.ButtonToolbar;
 var walletActions = require('../actions/WalletActions');
 var SourceDetailModal = require('./SourceDetailModal.jsx');
 var Accounting = require('accounting');
+var WalletStore = require('../stores/WalletStore');
 
 let Source = React.createClass({
   getInitialState() {
-    return {};
+    return {isLoading: false}
   },
 
   componentDidMount() {
@@ -18,7 +19,11 @@ let Source = React.createClass({
   },
 
   updateSource() {
-    walletActions.updateSource(this.props.data); //update given data
+    var comp = this;
+    this.setState({isLoading: true});
+    walletActions.updateSource(this.props.data, function(err) {
+      comp.setState({isLoading: false})
+    }); //update given data
   },
 
   deleteSource() {
@@ -35,7 +40,7 @@ let Source = React.createClass({
         <td> {Accounting.formatMoney(source.getBalanceSat()/100  , { symbol: "bits",  format: "%v %s" })} </td>
         <td>
           <ButtonToolbar>
-             <Button onClick={this.updateSource}><Glyphicon glyph="refresh" /></Button>
+             <Button onClick={!this.state.isLoading ? this.updateSource : null} disabled={this.state.isLoading}><Glyphicon glyph="refresh" /></Button>
              <ModalTrigger modal={<SourceDetailModal data={source}/>}>
                <Button ><Glyphicon glyph="pencil" /></Button>
              </ModalTrigger>

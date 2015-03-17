@@ -44,6 +44,23 @@ Wallet.prototype.addAccountData = function(data) {
   this.accountList.push(new Account(data));
 };
 
+Wallet.prototype.editSourceFields = function(id, data) {
+  var editSource = this.getAllSources().filter(function(source){return source.id == id});
+  for (var key of Object.keys(data)) {
+    if(editSource[0][key]) {editSource[0][key] = data[key]};
+  }
+};
+
+Wallet.prototype.getAllSources = function() {
+  var list = [];
+  for(var account of this.accountList) {
+    for(var source of account.sourceList) {
+      list.push(source);
+    }
+  }
+  return list;
+};
+
 function saveWallet(wallet) {
   // TODO implement saving ot local storage, encrypted
   console.log('Saving to LocalStorage');
