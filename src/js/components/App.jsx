@@ -10,24 +10,15 @@ var Location = Router.Location;
 var NotFound = Router.NotFound;
 
 let App = React.createClass({
-
-  getInitialState() {
-    return {
-
-    }
-  },
-
   render() {
     return (
-      <Locations>
-        <Location path="/" handler={Wallet} />
-        <Location path="/tx" handler={PageTransactions} />
-        <NotFound handler={PageNotFound} />
-      </Locations>
-    );
+        <Locations>
+          <Location path="/" handler={Wallet} />
+          <Location path="/tx" handler={PageTransactions} />
+          <NotFound handler={PageNotFound} />
+        </Locations>
+    )
   }
-
 });
-
 
 module.exports = App;

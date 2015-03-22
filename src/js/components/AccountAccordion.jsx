@@ -1,5 +1,6 @@
 const React = require('react');
 const boot = require('react-bootstrap/lib');
+const Panel = boot.Panel;
 const Account = require('./Account.jsx');
 
 let AccountTable = React.createClass({
@@ -15,7 +16,7 @@ let AccountTable = React.createClass({
   render() {
     var accounts = this.props.data;
     return (
-      <boot.PanelGroup defaultActiveKey='0'>
+      <boot.PanelGroup defaultActiveKey='0' accordion>
           {accounts.map(function(account, i) {
             return (
               <Account key={account.id} data={account} index={i}/>

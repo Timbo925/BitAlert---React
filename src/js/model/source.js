@@ -97,8 +97,7 @@ XpubSource.prototype.updateType = function (type, callback) {
   else { list = this.changeAddressList}
   updateList(list, function(err) {
     if(err) {console.log(err); callback(err)}
-    //Check latest
-    if(list.length == 0 || list[list.length - 1].nb_txs > 0) {
+    if(list.length == 0 || list[list.length - 1].nb_txs > 0) {    //Check if last transaction sas latest of the xpub chain
       xpub.addNextAddressList(type, function(err, nlist) {
         if (err) {callback(err)}
         else callback(null)
@@ -127,6 +126,7 @@ XpubSource.prototype.addNextAddressList = function (type, callback) {
     if(err) return callback(err);
     else {
       console.log('API Received List: ' , nlist);
+                                                            //TODO Get Tx information for addresses
       xpub[listLoc] = xpub[listLoc].concat(nlist);
       console.log('New List: ', xpub[listLoc]);
       callback(null);
@@ -156,16 +156,16 @@ function updateList(list, callback) {
     if (err) return callback(err);
     else {
       for (var i = 0; i < rlist.length; i++) {
-        if (rlist[0].address == list[0].address && rlist[0].nb_txs != list[0].nb_txs) {
-          list[0].balanceSat = rlist[0].balanceSat;
-          list[0].nb_txs = rlist[0].nb_txs;
-          //TODO get and update tx list
+        if (rlist[i].address == list[i].address && rlist[i].nb_txs != list[i].nb_txs) {
+          list[i].balanceSat = rlist[i].balanceSat;
+          list[i].nb_txs = rlist[i].nb_txs;
+          list[i].txList = rlist[i].txList;
         }
       }
       callback(null)
     }
   })
-};
+}
 
 function getAddressesFromList(list) {
   var rlist = [];
@@ -175,5 +175,5 @@ function getAddressesFromList(list) {
   return rlist;
 }
 //
-var x = new XpubSource({xpub: 'xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8'});
+//var x = new XpubSource({xpub: 'xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8'});
 //x.addNextAddresList(0,function(){});
