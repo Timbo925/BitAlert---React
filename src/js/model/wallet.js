@@ -47,7 +47,7 @@ Wallet.prototype.addAccountData = function(data) {
 Wallet.prototype.editSourceFields = function(id, data) {
   var editSource = this.getAllSources().filter(function(source){return source.id == id});
   for (var key of Object.keys(data)) {
-    if(editSource[0][key]) {editSource[0][key] = data[key]};
+    if(editSource[0][key] != 'undefined') {editSource[0][key] = data[key]};
   }
 };
 

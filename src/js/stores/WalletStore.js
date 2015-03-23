@@ -27,6 +27,7 @@ function saveWallet() {
 }
 
 function addNewSource(data) {
+  console.log('Catch:' ,data);
   var account =  wallet.getAccountById(data.account);
   delete data.account;
   account.addSourceData(data);

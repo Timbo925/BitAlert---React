@@ -34,7 +34,7 @@ Account.prototype.addSource = function (source) {
 
 /**
  *
- * @param data: {sourType: required, xpub: required, label, optional}
+ * @param data -- {sourType: required, xpub: required, label, optional}
  */
 Account.prototype.addSourceData = function (data) {
   switch (data.sourceType) {

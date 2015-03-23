@@ -4,6 +4,7 @@ const Const = require('../constants/AppConstants');
 var Tx = require('./tx');
 const Api = require('../util/api');
 const bitcore = require('bitcore');
+const async = require('async');
 
 //Interface
 function Source(data) {
@@ -36,26 +37,37 @@ function SingleSource(data) {
 SingleSource.prototype = Object.create(Source.prototype);
 SingleSource.prototype.constructor = SingleSource; //Set constructor to SingleSource
 
+//SingleSource.prototype.update = function(callback) {
+//  var source = this;
+//  Api.getAddresses([source.addressList[0].address],function(err, aList) {
+//    if (err && !aList[0]) return callback(new Error('Something went wrong retrieving balances'));
+//    var address = source.addressList[0];
+//    var newAddress = aList[0];
+//    if (source.initialized == false) {
+//      source.initialized = true;  //Set Updated to true
+//      source.addressList = aList; //Address can be changed to returned array from API
+//    } else {
+//      if (address.getBalanceSat() != newAddress.getBalanceSat()) {
+//        //When different something must have changed in id tx
+//        for (let tx of newAddress.txList) {
+//          var index = helper.indexOfObjectArray(address.txList, tx.tx, 'tx');
+//          if (index < 0) address.txList.push(tx); // No else because
+//        }
+//      }
+//    }
+//    callback(null);
+//  });
+//};
+
 SingleSource.prototype.update = function(callback) {
   var source = this;
-  Api.getAddresses([source.addressList[0].address],function(err, aList) {
-    if (!err && !aList[0]) return callback(new Error('Something went wrong retrieving balances'))
-    var address = source.addressList[0];
-    var newAddress = aList[0];
-    if (source.initialized == false) {
-      source.initialized = true;  //Set Updated to true
-      source.addressList = aList; //Address can be changed to returned array from API
-    } else {
-      if (address.getBalanceSat() != newAddress.getBalanceSat()) {
-        //When different something must have changed in id tx
-        for (let tx of newAddress.txList) {
-          var index = helper.indexOfObjectArray(address.txList, tx.tx, 'tx');
-          if (index < 0) address.txList.push(tx); // No else because
-        }
-      }
+  Api.updateAddressList(this.addressList, function(err) {
+    if (err) {return callback(err)}
+    else {
+      console.log('Updated Source', source.addressList);
+      callback(null)
     }
-    callback(null);
-  });
+  })
 };
 
 
@@ -75,63 +87,87 @@ function XpubSource(data) {
   if (data.changeAddressList) {
     for(var i = 0; i < data.changeAddressList.length; i++) this.changeAddressList.push(new Address(data.changeAddressList[i]))
   }
+
+  //Add first addresses if needed for nex xpub source
+  var source = this;
+  if (this.initialized == false) {
+    this.addressList = this.addNextAddresses(this.addressList);
+    this.changeAddressList = this.addNextAddresses(this.changeAddressList);
+    source.initialized = true;
+  }
 }
 
 XpubSource.prototype = Object.create(Source.prototype);
 XpubSource.prototype.constructor = XpubSource;
 
-XpubSource.prototype.update = function(callback) {
-  var xpub = this;
-  xpub.updateType(0, function(err) {
-    if (err) callback(err);
-    else xpub.updateType(1, function(err) {
-      if (err) callback(err);
-      else callback(null)
-    })
-  })
-};
-
-XpubSource.prototype.updateType = function (type, callback) {
-  var list; var depth; var xpub = this;
-  if (type == 0) { list = this.addressList}
-  else { list = this.changeAddressList}
-  updateList(list, function(err) {
-    if(err) {console.log(err); callback(err)}
-    if(list.length == 0 || list[list.length - 1].nb_txs > 0) {    //Check if last transaction sas latest of the xpub chain
-      xpub.addNextAddressList(type, function(err, nlist) {
-        if (err) {callback(err)}
-        else callback(null)
-      })
-    } else {
-      callback(null)
-    }
-  })
-
-};
-
 /**
- *
- * @param type : 0 or 1
- * @param callback : function(list)
+ * Update both types of sources
+ * @param callback
  */
-XpubSource.prototype.addNextAddressList = function (type, callback) {
-  var xpub = this;
-  var listLoc;
-  var depth;
-  if (type == 0) { listLoc = "addressList";  depth = 'inDepth'}
-  else {listLoc = "changeAddressList";  depth = 'exDepth'}
-  this[depth] += 9;
-  var searchList = this.getAddresses(type, this[depth] - 9, this[depth]);  //Take next 10 addresses
-  Api.getAddresses(searchList, function(err, nlist)  {
-    if(err) return callback(err);
+
+XpubSource.prototype.update = function(callback) {
+  var source = this;
+  async.each([source.addressList, source.changeAddressList], function(list, callback) {
+    Api.updateAddressList(list, function(err) {
+      if (err) return callback(err);
+      else {
+        console.log('Updated Xpub Source: ', source.addressList);
+        callback(null)
+      }
+    })
+  }, function(err) {
+    if (err) callback(err);
     else {
-      console.log('API Received List: ' , nlist);
-                                                            //TODO Get Tx information for addresses
-      xpub[listLoc] = xpub[listLoc].concat(nlist);
-      console.log('New List: ', xpub[listLoc]);
-      callback(null);
+      source.testAddUpdate(function(err) {
+        callback(err);
+      })
     }
   })
+};
+
+XpubSource.prototype.testAddUpdate = function(callback) {
+  var source = this;
+  async.each([source.addressList, source.changeAddressList], function(list, callback) {
+    //console.log('Each Source:' , list);
+    source.testAddUpdateList(list,function(err) {
+      if (err) callback(err);
+      else callback(null);
+    })
+  }, function(err) {
+    if (err) callback(err);
+    else callback(null);
+  })
+};
+
+XpubSource.prototype.testAddUpdateList = function(list, callback) {
+  var xpub = this;
+  async.whilst(
+    function(){
+      return !isFull(list)},                   // Check if list is full and needs new addresses
+    function(callback) {
+      console.log('Xpub Full', list);
+      list = xpub.getAddresses(list);                   // Add addresses to the list
+      xpub.updateAddressList(list, function(err) {      // Update the new list
+        if (err) callback(err);
+        else callback(null);
+      })
+    },
+    function(err) {
+      if (err) callback(err);
+      else callback(null);
+    }
+  )
+};
+
+XpubSource.prototype.addNextAddresses = function (list) {
+  var xpub = this;
+  var depth = list === xpub.addressList ? 'inDepth': 'exDepth';
+  var type = list === xpub.addressList ? 0 : 1;
+  this[depth] += 9;                                                     //Set new depth
+  var newList = this.getAddresses(type, this[depth] - 9, this[depth]);  //Take next 10 addresses
+  console.log('New Addresses:', newList)
+  return list = list.concat(newList);
+
 };
 
 XpubSource.prototype.getAddresses = function(type, from, to) {
@@ -140,9 +176,8 @@ XpubSource.prototype.getAddresses = function(type, from, to) {
   var hdPublicKey = new bitcore.HDPublicKey(xpubSource['xpub']);
   for(var i = from; i < to + 1; i ++) {
     var address = new bitcore.Address(hdPublicKey.derive(type).derive(i).publicKey);
-    addressList.push(address.toString());
+    addressList.push(new Address({address: address.toString()}));
   }
-  ///console.log('AddressList from Xpub: ' , addressList);
   return addressList;
 };
 
@@ -150,21 +185,14 @@ exports.Source = Source;
 exports.SingleSource = SingleSource;
 exports.XpubSource = XpubSource;
 
-function updateList(list, callback) {
-  if(list.length == 0) return callback(null); //Nothing to update
-  Api.getAddresses(getAddressesFromList(list), function(err, rlist) {
-    if (err) return callback(err);
-    else {
-      for (var i = 0; i < rlist.length; i++) {
-        if (rlist[i].address == list[i].address && rlist[i].nb_txs != list[i].nb_txs) {
-          list[i].balanceSat = rlist[i].balanceSat;
-          list[i].nb_txs = rlist[i].nb_txs;
-          list[i].txList = rlist[i].txList;
-        }
-      }
-      callback(null)
-    }
-  })
+
+/**
+ * Test if last address has any transactions
+ * @param list
+ * @returns {boolean}
+ */
+function isFull(list) {
+  return list[list.length -1].nb_txs < 1
 }
 
 function getAddressesFromList(list) {
@@ -174,6 +202,6 @@ function getAddressesFromList(list) {
   }
   return rlist;
 }
-//
+
 //var x = new XpubSource({xpub: 'xpub661MyMwAqRbcFtXgS5sYJABqqG9YLmC4Q1Rdap9gSE8NqtwybGhePY2gZ29ESFjqJoCu1Rupje8YtGqsefD265TMg7usUDFdp6W1EGMcet8'});
 //x.addNextAddresList(0,function(){});

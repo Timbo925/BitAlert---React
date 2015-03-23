@@ -40,11 +40,13 @@ var exp = {
    * @param callback -- callback(Error)
    */
   updateAddressList : function(list , callback) {
+    var api = this;
     request
       .get('http://btc.blockr.io/api/v1/address/info/' + listToCommaString(list))
       .accept('json')
       .query({confirmations: 0})
       .end(function(err, res) {
+        console.log('API UpdateAddress Response: ', res);
         if (err) return callback(err);
         else if (res.ok) {
           var updateList = [];
@@ -60,7 +62,7 @@ var exp = {
             console.log('Nothing to update'); //TODO CONSOLE LOG
             callback(null)
           } else {
-            this.updateTxAddressList(updateList, function(err) {
+            api.updateTxAddressList(updateList, function(err) {
               if (err) return callback(err);
               else return callback(null);
             })
@@ -78,9 +80,10 @@ var exp = {
    */
   updateTxAddressList: function(list , callback) {
     request
-      .get('http://btc.blockr.io/api/v1/address/txs/' + addressToString(addressList))
+      .get('http://btc.blockr.io/api/v1/address/txs/' + listToCommaString(list))
       .accept('json')
       .end(function(err, res) {
+        console.log('API UpdateTxAddress Response: ', res);
         if (err) return callback(err);
         else if (!res.ok) return callback(new Error('updateTXAddressList problem', res));
         else {

@@ -35,14 +35,14 @@ module.exports = {
       else {
         AppDispatcher.handleViewAction({
           type: Constants.ActionTypes.UPDATE_SOURCE
-        })
+        });
         callback(null)
       }
     });
   },
 
   editSourceFields: function(id, data) {
-    AppDispatcher.handleServerAction({
+    AppDispatcher.handleViewAction({
       type: Constants.ActionTypes.EDIT_SOURCE,
       id: id,
       data: data
