@@ -9,7 +9,8 @@ module.exports = {
     UPDATE_SOURCE_PENDING: null,
     REMOVE_SOURCE: null,
     SAVE_WALLET: null,
-    EDIT_SOURCE: null
+    EDIT_SOURCE: null,
+    DELETE_SOURCE: null
   }),
 
   ActionSources: keyMirror({

@@ -32,6 +32,14 @@ Wallet.prototype.changeAccount = function(id, key, value) {
   }
 };
 
+Wallet.prototype.deleteSource = function(id) {
+  var wallet = this;
+  for(var i = 0 ; i < wallet.accountList.length ; i++) {
+    wallet.accountList[i].sourceList = wallet.accountList[i].sourceList.filter(function(source) {return source.id != id})
+  }
+
+};
+
 
 Wallet.prototype.getAccountById = function(id) {
   for (var i = 0; i<this.accountList.length; i++) {

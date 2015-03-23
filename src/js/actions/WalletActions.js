@@ -47,6 +47,13 @@ module.exports = {
       id: id,
       data: data
     })
+  },
+
+  deleteSource: function(id) {
+    AppDispatcher.handleViewAction({
+      type: Constants.ActionTypes.DELETE_SOURCE,
+      id : id
+    })
   }
 };
 

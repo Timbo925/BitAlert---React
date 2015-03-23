@@ -27,7 +27,7 @@ let Source = React.createClass({
   },
 
   deleteSource() {
-    alert('TODO delete source')
+    walletActions.deleteSource(this.props.data.id)
   },
 
   render() {

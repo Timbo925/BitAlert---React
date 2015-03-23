@@ -37,39 +37,15 @@ function SingleSource(data) {
 SingleSource.prototype = Object.create(Source.prototype);
 SingleSource.prototype.constructor = SingleSource; //Set constructor to SingleSource
 
-//SingleSource.prototype.update = function(callback) {
-//  var source = this;
-//  Api.getAddresses([source.addressList[0].address],function(err, aList) {
-//    if (err && !aList[0]) return callback(new Error('Something went wrong retrieving balances'));
-//    var address = source.addressList[0];
-//    var newAddress = aList[0];
-//    if (source.initialized == false) {
-//      source.initialized = true;  //Set Updated to true
-//      source.addressList = aList; //Address can be changed to returned array from API
-//    } else {
-//      if (address.getBalanceSat() != newAddress.getBalanceSat()) {
-//        //When different something must have changed in id tx
-//        for (let tx of newAddress.txList) {
-//          var index = helper.indexOfObjectArray(address.txList, tx.tx, 'tx');
-//          if (index < 0) address.txList.push(tx); // No else because
-//        }
-//      }
-//    }
-//    callback(null);
-//  });
-//};
-
 SingleSource.prototype.update = function(callback) {
   var source = this;
   Api.updateAddressList(this.addressList, function(err) {
     if (err) {return callback(err)}
     else {
-      console.log('Updated Source', source.addressList);
-      callback(null)
+      callback(null);
     }
   })
 };
-
 
 /**
  *
@@ -110,10 +86,7 @@ XpubSource.prototype.update = function(callback) {
   async.each([source.addressList, source.changeAddressList], function(list, callback) {
     Api.updateAddressList(list, function(err) {
       if (err) return callback(err);
-      else {
-        console.log('Updated Xpub Source: ', source.addressList);
-        callback(null)
-      }
+      else callback(null);
     })
   }, function(err) {
     if (err) callback(err);

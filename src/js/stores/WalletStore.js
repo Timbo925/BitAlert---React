@@ -76,6 +76,10 @@ let WalletStore = assign({}, BaseStore, {
             wallet.editSourceFields(action.id, action.data);
             WalletStore.emitChange();
             break;
+      case Constants.ActionTypes.DELETE_SOURCE:
+            wallet.deleteSource(action.id);
+            WalletStore.emitChange();
+            break;
     }
   })
 
