@@ -10,7 +10,7 @@ let PageNotFound = React.createClass({
 
   render() {
     return (
-      <p>Hello, world!</p>
+      <h1>404, Page Not Found !!</h1>
     );
   }
 });

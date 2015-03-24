@@ -53,8 +53,9 @@ let Wallet = React.createClass({
     var wallet = this.state.wallet;
     return (
       <div className = "container">
-        <NavigationPils active={1} balance={wallet.getBalanceSat()}/>
         <Row>
+        <NavigationPils active={1} balance={wallet.getBalanceSat()}/>
+
             <boot.PageHeader>
                 BitAlert Wallet <small> {wallet.getBalanceSat()/100} <small> bits</small> </small>
             </boot.PageHeader>

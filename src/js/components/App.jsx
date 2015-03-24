@@ -3,6 +3,7 @@ var React = require('react');
 var Wallet = require('./Wallet.jsx');
 var PageTransactions = require('./PageTransactions.jsx');
 var PageNotFound = require('./PageNotFound.jsx');
+var Home = require('./new/Home.jsx');
 //Router
 var Router = require('react-router-component');
 var Locations = Router.Locations;
@@ -13,8 +14,9 @@ let App = React.createClass({
   render() {
     return (
         <Locations>
-          <Location path="/" handler={Wallet} />
+          <Location path="/" handler={Home} />
           <Location path="/tx" handler={PageTransactions} />
+          <Location path='/new' handler={Wallet}/>
           <NotFound handler={PageNotFound} />
         </Locations>
     )

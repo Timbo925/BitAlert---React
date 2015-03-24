@@ -92,7 +92,8 @@ XpubSource.prototype.update = function(callback) {
     if (err) callback(err);
     else {
       source.testAddUpdate(function(err) {
-        callback(err);
+        if (err) callback(err);
+        else callback(null)
       })
     }
   })
@@ -100,34 +101,46 @@ XpubSource.prototype.update = function(callback) {
 
 XpubSource.prototype.testAddUpdate = function(callback) {
   var source = this;
-  async.each([source.addressList, source.changeAddressList], function(list, callback) {
-    //console.log('Each Source:' , list);
-    source.testAddUpdateList(list,function(err) {
-      if (err) callback(err);
-      else callback(null);
-    })
-  }, function(err) {
+
+  source.testAddUpdateList(source.addressList,function(err, retList) {
     if (err) callback(err);
-    else callback(null);
-  })
+    else {
+      source.addressList = retList;
+      //console.log('Updated List from test: ', source.addressList, retList);
+      source.testAddUpdateList(source.changeAddressList, function(err, retList) {
+        if (err) callback(err)
+        else {
+          source.changeAddressList = retList;
+          callback(null)
+        }
+      })
+    }
+  });
 };
 
 XpubSource.prototype.testAddUpdateList = function(list, callback) {
   var xpub = this;
   async.whilst(
     function(){
-      return !isFull(list)},                   // Check if list is full and needs new addresses
+      return !isFull(list)},                           // Check if list is full and needs new addresses
     function(callback) {
-      console.log('Xpub Full', list);
-      list = xpub.getAddresses(list);                   // Add addresses to the list
-      xpub.updateAddressList(list, function(err) {      // Update the new list
+      //console.log('Xpub Full: ', list);
+      list = xpub.addNextAddresses(list);              // Add addresses to the list
+      //console.log('Xpub Filled: ', list);
+      Api.updateAddressList(list, function(err) {      // Update the new list
         if (err) callback(err);
-        else callback(null);
+        else {
+          //console.log('from updateAddressList: ', list);
+          callback(null);
+        }
       })
     },
     function(err) {
       if (err) callback(err);
-      else callback(null);
+      else {
+        //console.log('out whilst: ', list);
+        callback(null, list);
+      }
     }
   )
 };
@@ -138,7 +151,7 @@ XpubSource.prototype.addNextAddresses = function (list) {
   var type = list === xpub.addressList ? 0 : 1;
   this[depth] += 9;                                                     //Set new depth
   var newList = this.getAddresses(type, this[depth] - 9, this[depth]);  //Take next 10 addresses
-  console.log('New Addresses:', newList)
+  //console.log('New Addresses:', newList)
   return list = list.concat(newList);
 
 };
@@ -165,6 +178,7 @@ exports.XpubSource = XpubSource;
  * @returns {boolean}
  */
 function isFull(list) {
+  //console.log('isfull: ', list);
   return list[list.length -1].nb_txs < 1
 }
 

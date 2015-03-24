@@ -41,6 +41,9 @@
     "superagent":"*",
     "bitcore": "*",
     "accounting": "*",
-    "async" : "*"
+    "async" : "*",
+    "react-router": "*",
+    "react-router-bootstrap" : "*",
+    "pubsub-js": "*"
   }
 }

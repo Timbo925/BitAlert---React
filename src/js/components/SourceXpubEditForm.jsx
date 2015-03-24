@@ -28,14 +28,16 @@ let SourceXpubEditForm = React.createClass({
         <Table>
           <thead>
             <tr>
-              <th> Regular Addresses </th> <th> Balance </th>
+              <th> Regular Addresses </th> <th> Balance </th> <th>  Txs</th>
             </tr>
           </thead>
           <tbody>
             {source.addressList.map(function(address, index) {
               return (
                 <tr key={index}>
-                  <td> {address.address} </td> <td> {Accounting.formatMoney(address.getBalanceSat()/100  , { symbol: "bits",  format: "%v %s" })} </td>
+                  <td> {address.address} </td>
+                  <td> {Accounting.formatMoney(address.getBalanceSat()/100  , { symbol: "bits",  format: "%v %s" })} </td>
+                  <td> {address.nb_txs} </td>
                 </tr>)
             })}
           </tbody>
@@ -43,14 +45,16 @@ let SourceXpubEditForm = React.createClass({
         <Table>
           <thead>
             <tr>
-              <th> Change Addresses </th> <th> Balance </th>
+              <th> Change Addresses </th> <th> Balance </th> <th> Txs </th>
             </tr>
           </thead>
           <tbody>
             {source.changeAddressList.map(function(address, index) {
               return (
                 <tr key={index}>
-                  <td> {address.address} </td> <td> {Accounting.formatMoney(address.getBalanceSat()/100  , { symbol: "bits",  format: "%v %s" })} </td>
+                  <td> {address.address} </td>
+                  <td> {Accounting.formatMoney(address.getBalanceSat()/100  , { symbol: "bits",  format: "%v %s" })} </td>
+                  <td> {address.nb_txs} </td>
                 </tr>)
             })}
           </tbody>
