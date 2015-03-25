@@ -18,7 +18,7 @@ let AccountItem = React.createClass({
 
   render() {
     return (
-      <ListGroupItem onClick={this.onClick} header={this.props.account.label}>{this.props.account.getBalanceSat()}</ListGroupItem>
+      <ListGroupItem bsStyle={this.props.index == this.props.selected ? 'info' : "default"} onClick={this.onClick} header={this.props.account.label}>{this.props.account.getBalanceSat()}</ListGroupItem>
     );
   }
 });

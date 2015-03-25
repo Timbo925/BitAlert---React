@@ -1,19 +1,12 @@
 const React = require('react');
 const boot = require('react-bootstrap');
-const Col = boot.Col;
-const Row = boot.Row;
-const Button = boot.Button;
-const PageHeader = boot.PageHeader;
-const TabbedArea = boot.TabbedArea;
-const TabPane = boot.TabPane;
-const Panel = boot.Panel;
-const ListGroup = boot.ListGroup;
-const ListGroupItem = boot.ListGroupItem;
+const {Col, Row, Button, PageHeader, TabbedArea,TabPane,Panel,ListGroup,ListGroupItem, ModalTrigger} = boot;
 const WalletStore = require('../../stores/WalletStore');
 const AccountItem = require('./AccountItem.jsx');
 const Account = require('../Account.jsx');
 const AccountEdit = require('../AccountEditForm.jsx');
 const PubSub = require('pubsub-js');
+const AddModal = require('../AddModal.jsx');
 
 
 let NewWallet = React.createClass({
@@ -27,22 +20,18 @@ let NewWallet = React.createClass({
     var comp = this;
     WalletStore.addChangeListener(this._onChange);
     var subscription = PubSub.subscribe('Account Selected', function(msg, data) {
-      comp.setState({selected: data})
+      comp.setState({selected: data});
     })
   },
 
   _onChange() {
-    this.setState({wallet: WalletStore.getAll})
+    this.setState({wallet: WalletStore.getWallet()})
   },
 
   add() {
     console.log('TODO add')
   },
 
-  changeSelected(number) {
-    console.log('Selected: ', number);
-    this.setState({selected: number});
-  },
 
   render() {
     var wal = this;
@@ -52,9 +41,12 @@ let NewWallet = React.createClass({
           <Col md={3}>
             <ListGroup>
               {this.state.wallet.accountList.map(function(account, i) {
-                return <AccountItem onClick={wal.add} account={account} index ={i} key={i}/>
+                return <AccountItem account={account} index ={i} key={i} selected={wal.state.selected}/>
               })}
-              <ListGroupItem bsStyle='info'> Add Account/Source </ListGroupItem>
+              <ModalTrigger modal={<AddModal accountList={this.state.wallet.accountList}/>} >
+                <ListGroupItem bsStyle='danger'> Add Account/Source </ListGroupItem>
+              </ModalTrigger>
+
             </ListGroup>
           </Col>
 
