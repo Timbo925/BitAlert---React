@@ -14,7 +14,7 @@ var routes = [
     <NotFoundRoute handler={NotFound}/>
     <DefaultRoute handler={Wallet} />
   </Route>
-];
+]; 
 
 Router.run(routes, function (Handler) {
   React.render(<Handler/>, document.body);
