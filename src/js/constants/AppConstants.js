@@ -22,6 +22,10 @@ module.exports = {
     Single: null,
     Xpub: null,
     GreenAddress: null
+  }),
+
+  PubSubTypes: keyMirror({
+    UPDATE_ACCOUNT_NUMBER: null
   })
 
 };
